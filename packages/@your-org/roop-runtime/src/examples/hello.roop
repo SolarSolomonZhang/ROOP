@@ -1,0 +1,5 @@
+start task "HelloWorld":
+  say "Hello from ROOP runtime"
+  wait 0.1
+  say "Goodbye"
+end task

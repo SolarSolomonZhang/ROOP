@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.loop-robotics.com/roop/roopmodule.schema.json",
+  "title": "ROOP Module Manifest",
+  "type": "object",
+  "required": ["module", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version for the manifest",
+      "default": "1.0"
+    },
+    "module": {
+      "$ref": "#/$defs/moduleMeta"
+    },
+    "interfaces": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/interface" },
+      "description": "Interfaces exposed by this module"
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/capability" }
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "telemetry": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/telemetry" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/errorSpec" }
+    },
+    "safety": {
+      "$ref": "#/$defs/safety" }
+    ,
+    "permissions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/permission" }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/dependency" }
+    },
+    "profiles": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/profile" }
+    },
+    "testing": {
+      "type": "object",
+      "properties": {
+        "smoke": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/testCase" }
+        },
+        "integration": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/testCase" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "examples": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/example" }
+    },
+    "x-notes": {
+      "type": "string",
+      "description": "Free-form annotations"
+    }
+  },
+  "$defs": {
+    "moduleMeta": {
+      "type": "object",
+      "required": ["id", "name", "version", "vendor"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_.-]+$" },
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "vendor": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["manipulation", "mobility", "perception", "system", "safety", "planning", "comms", "iot"] },
+        "hardware": { "type": "array", "items": { "type": "string" } },
+        "profiles": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "interface": {
+      "type": "object",
+      "required": ["type", "endpoint"],
+      "properties": {
+        "type": { "type": "string", "enum": ["rest", "grpc", "mqtt", "ros", "serial", "mock"] },
+        "endpoint": { "type": "string" },
+        "auth": { "type": "string", "enum": ["none", "basic", "token", "mtls"] },
+        "topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "capability": {
+      "type": "object",
+      "required": ["verb"],
+      "properties": {
+        "verb": { "type": "string" },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": { "type": "string" },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameter" }
+        },
+        "returns": { "$ref": "#/$defs/returnSpec" },
+        "constraints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/constraint" }
+        },
+        "resources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/resource" }
+        },
+        "concurrency": { "$ref": "#/$defs/concurrency" },
+        "qos": { "$ref": "#/$defs/qos" },
+        "safety": { "$ref": "#/$defs/safety" }
+      },
+      "additionalProperties": false
+    },
+    "parameter": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "required": { "type": "boolean", "default": true },
+        "unit": { "type": "string" },
+        "default": {},
+        "enum": {
+          "type": "array",
+          "items": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "returnSpec": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "schema": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["spatial", "temporal", "safety", "resource"] },
+        "expression": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "quantity": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "concurrency": {
+      "type": "object",
+      "properties": {
+        "exclusive": { "type": "boolean" },
+        "maxParallel": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "qos": {
+      "type": "object",
+      "properties": {
+        "timeoutMs": { "type": "integer", "minimum": 0 },
+        "retry": { "$ref": "#/$defs/retryPolicy" }
+      },
+      "additionalProperties": false
+    },
+    "retryPolicy": {
+      "type": "object",
+      "properties": {
+        "initialMs": { "type": "integer", "minimum": 0 },
+        "maxMs": { "type": "integer", "minimum": 0 },
+        "multiplier": { "type": "number", "minimum": 1 },
+        "maxAttempts": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "safety": {
+      "type": "object",
+      "properties": {
+        "hazards": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "controls": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "estop": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "permission": {
+      "type": "object",
+      "properties": {
+        "action": { "type": "string" },
+        "scope": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "properties": {
+        "module": { "type": "string" },
+        "version": { "type": "string" },
+        "optional": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "overrides": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "topic": { "type": "string" },
+        "schema": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "errorSpec": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error"] }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "payload": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "testCase": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "script": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "example": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "snippet": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "ROOP",
+  "scopeName": "source.roop",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#durations" },
+    { "include": "#declarations" },
+    { "include": "#blockHeaders" },
+    { "include": "#control" },
+    { "include": "#triggers" },
+    { "include": "#operators" },
+    { "include": "#booleansNull" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.roop",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.roop",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [{ "name": "constant.character.escape.roop", "match": "\\\\." }]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.roop",
+          "match": "(?x)
+            (?:
+              [0-9]+(?:\\.[0-9]+)?
+            )
+          "
+        }
+      ]
+    },
+    "durations": {
+      "patterns": [
+        {
+          "name": "constant.other.duration.roop",
+          "match": "[0-9]+(?:\\.[0-9]+)?\\s*(?:ms|s|sec|m|min|h|hr|day|days)"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "name": "keyword.control.declaration.roop",
+          "match": "\\b(start\\s+task|end\\s+task|template\\s+task|use\\s+module|import|include|pragma)\\b"
+        }
+      ]
+    },
+    "blockHeaders": {
+      "patterns": [
+        {
+          "name": "keyword.control.block.roop",
+          "match": "\\b(when|on|at|if|elseif|else|repeat|while|for|parallel|fallback)\\b"
+        }
+      ]
+    },
+    "control": {
+      "patterns": [
+        {
+          "name": "keyword.control.flow.roop",
+          "match": "\\b(await|detached|run|break|continue|retry|fallback|abort|exit)\\b"
+        }
+      ]
+    },
+    "triggers": {
+      "patterns": [
+        {
+          "name": "support.function.trigger.roop",
+          "match": "\\b(every|until|with\\s+timeout|when|on|at)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.roop",
+          "match": "\\b(and|or|not|within|near|before|after|in|on)\\b"
+        },
+        {
+          "name": "keyword.operator.symbolic.roop",
+          "match": "==|!=|<=|>=|<|>|\\+|\\-|\\*|/"
+        }
+      ]
+    },
+    "booleansNull": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.roop",
+          "match": "\\b(true|false|null)\\b"
+        }
+      ]
+    }
+  }
+}

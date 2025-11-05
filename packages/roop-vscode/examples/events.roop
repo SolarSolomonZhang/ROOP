@@ -1,0 +1,8 @@
+start task "MonitorTemperature":
+  every 30s:
+    let reading = get sensor "temperature" from "Kitchen"
+    if reading > 75:
+      notify "Temperature high"
+  on failure:
+    log "Failed to read sensor"
+end task

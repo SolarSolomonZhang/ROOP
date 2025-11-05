@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "module": {
+    "id": "loop.arm.v1",
+    "name": "Six DoF Arm",
+    "version": "1.0.0",
+    "vendor": "Loop Robotics",
+    "category": "manipulation",
+    "description": "Industrial arm with gripper"
+  },
+  "interfaces": [
+    {
+      "type": "ros",
+      "endpoint": "ros://arm-controller",
+      "topics": ["/arm/state", "/arm/command"]
+    }
+  ],
+  "capabilities": [
+    {
+      "verb": "move",
+      "description": "Move the arm to a named pose",
+      "parameters": [
+        { "name": "to", "type": "pose", "required": true },
+        { "name": "speed", "type": "number", "default": 1.0 }
+      ],
+      "returns": {
+        "type": "result",
+        "description": "Execution state"
+      }
+    },
+    {
+      "verb": "grasp",
+      "description": "Close the gripper",
+      "parameters": [
+        { "name": "with", "type": "string", "required": true }
+      ]
+    }
+  ]
+}
