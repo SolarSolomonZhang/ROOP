@@ -1,0 +1,67 @@
+{
+  "Task skeleton": {
+    "prefix": "task",
+    "body": [
+      "start task \"${1:TaskName}\":",
+      "  when ${2:condition}:",
+      "    ${3:action}",
+      "end task"
+    ],
+    "description": "Create a ROOP task block"
+  },
+  "If block": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}:",
+      "  ${2:action}",
+      "else:",
+      "  ${3:elseAction}"
+    ],
+    "description": "Conditional block"
+  },
+  "Parallel block": {
+    "prefix": "parallel",
+    "body": [
+      "parallel:",
+      "  ${1:// branch 1}",
+      "  ${2:// branch 2}"
+    ],
+    "description": "Run actions in parallel"
+  },
+  "Move verb": {
+    "prefix": "move",
+    "body": [
+      "move ${1:arm} to ${2:target}"
+    ],
+    "description": "Move an actuator"
+  },
+  "Grasp verb": {
+    "prefix": "grasp",
+    "body": [
+      "grasp with ${1:gripper}"
+    ],
+    "description": "Grasp with a tool"
+  },
+  "Release verb": {
+    "prefix": "release",
+    "body": [
+      "release with ${1:gripper}"
+    ],
+    "description": "Release with a tool"
+  },
+  "Every trigger": {
+    "prefix": "every",
+    "body": [
+      "every ${1:10s}:",
+      "  ${2:action}"
+    ],
+    "description": "Periodic trigger"
+  },
+  "Use module": {
+    "prefix": "usemodule",
+    "body": [
+      "use module ${1:moduleId}"
+    ],
+    "description": "Declare module usage"
+  }
+}

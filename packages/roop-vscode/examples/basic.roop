@@ -1,0 +1,6 @@
+start task "GreetAndWave":
+  say "Hello world"
+  move Arm1 to "WavePose"
+  grasp with Gripper1
+  release with Gripper1
+end task

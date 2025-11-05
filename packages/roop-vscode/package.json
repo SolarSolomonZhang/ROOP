@@ -1,0 +1,242 @@
+{
+  "name": "roop-language-support",
+  "displayName": "ROOP Language Support",
+  "publisher": "loop-robotics",
+  "version": "0.4.0",
+  "description": "Syntax colouring, snippets, diagnostics, and a robot preview for the ROOP DSL.",
+  "license": "MIT",
+  "main": "./extension.js",
+  "type": "commonjs",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": ["Programming Languages"],
+  "activationEvents": [
+    "onLanguage:roop",
+    "workspaceContains:**/*.roop",
+    "workspaceContains:**/*.roopmodule.json",
+    "onCommand:roop.insertTask",
+    "onCommand:roop.newProject",
+    "onCommand:roop.openDocs",
+    "onCommand:roop.runTask",
+    "onCommand:roop.validateDocument",
+    "onCommand:roop.scanModules",
+    "onCommand:roop.generateModuleManifest",
+    "onCommand:roopRobot.simulateActiveDocument",
+    "onCommand:roopRobot.stop",
+    "onCommand:roopRobot.toggle",
+    "onView:roopRobotView",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "roop",
+        "aliases": ["ROOP", "roop"],
+        "extensions": [".roop"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "roop",
+        "scopeName": "source.roop",
+        "path": "./syntaxes/roop.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "roop",
+        "path": "./snippets/roop.code-snippets"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": "*.roopmodule.json",
+        "url": "./schemas/roopmodule.schema.json"
+      }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "roop",
+        "required": ["command"],
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "compile | validate | format | run"
+          },
+          "args": {
+            "type": "array",
+            "description": "Arguments forwarded to the runtime CLI"
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "roop.insertTask",
+        "title": "ROOP: Insert Task Skeleton"
+      },
+      {
+        "command": "roop.newProject",
+        "title": "ROOP: Create Example Project"
+      },
+      {
+        "command": "roop.openDocs",
+        "title": "ROOP: Open Language Reference"
+      },
+      {
+        "command": "roop.runTask",
+        "title": "ROOP: Run Current Task"
+      },
+      {
+        "command": "roop.validateDocument",
+        "title": "ROOP: Validate Document"
+      },
+      {
+        "command": "roop.scanModules",
+        "title": "ROOP: Scan Modules"
+      },
+      {
+        "command": "roop.generateModuleManifest",
+        "title": "ROOP: Generate Module Manifest"
+      },
+      {
+        "command": "roopRobot.simulateActiveDocument",
+        "title": "ROOP Robot: Simulate Active Document"
+      },
+      {
+        "command": "roopRobot.stop",
+        "title": "ROOP Robot: Stop Simulation"
+      },
+      {
+        "command": "roopRobot.toggle",
+        "title": "ROOP Robot: Toggle View"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "roop",
+          "title": "ROOP",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "roop": [
+        { "id": "roop.modules", "name": "Modules" },
+        { "id": "roop.tasks", "name": "Tasks" },
+        { "id": "roop.world", "name": "World Model" },
+        { "id": "roopRobotView", "name": "Robot" }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "roop.modules",
+        "contents": "[Create an example project](command:roop.newProject) to get started."
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "$roop-lsp",
+        "owner": "roop",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": [
+          {
+            "regexp": "^(.+):(\\d+):(\\d+) - (warning|error) (.+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "ROOP",
+      "properties": {
+        "roop.format.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable built-in formatter for ROOP documents"
+        },
+        "roop.format.indentSize": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 2,
+          "maximum": 8,
+          "description": "Spaces per indentation level"
+        },
+        "roop.lint.missingColon.severity": {
+          "type": "string",
+          "enum": ["off", "hint", "warning", "error"],
+          "default": "warning",
+          "description": "Severity for missing colon diagnostics"
+        },
+        "roop.lint.unbalancedTask.severity": {
+          "type": "string",
+          "enum": ["off", "hint", "warning", "error"],
+          "default": "error",
+          "description": "Severity for unmatched start/end task diagnostics"
+        },
+        "roop.completion.extraKeywords": {
+          "type": "array",
+          "default": [],
+          "items": { "type": "string" },
+          "description": "Additional keywords for IntelliSense"
+        },
+        "roop.verbs": {
+          "type": "array",
+          "default": ["move", "grasp", "release", "navigate", "dock", "open", "close", "turn on", "turn off", "display", "notify", "log", "plan", "detect", "recognize", "scan", "analyze", "say"],
+          "items": { "type": "string" },
+          "description": "Built-in verbs recognised by the extension"
+        },
+        "roop.runtime.path": {
+          "type": "string",
+          "default": "${workspaceFolder}/packages/@your-org/roop-runtime",
+          "description": "Location of the ROOP runtime workspace"
+        },
+        "roopRobot.autoSimulateOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically simulate ROOP documents on save"
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[roop]": {
+        "editor.defaultFormatter": "roop-language-support",
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.wordBasedSuggestions": false
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "roop.gettingStarted",
+        "title": "Getting Started with ROOP",
+        "description": "Learn the basics of the ROOP DSL",
+        "steps": [
+          {
+            "id": "roop.openDocs",
+            "title": "Open the ROOP language reference",
+            "description": "Browse the bundled guide",
+            "media": {
+              "markdown": "[Open the language reference](command:roop.openDocs)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "lint": "node ./scripts/lint.js",
+    "format": "node ./scripts/format.js",
+    "clean": "node ./scripts/clean.js",
+    "test": "node ./scripts/smoke-test.js"
+  }
+}

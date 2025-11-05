@@ -1,0 +1,7 @@
+start task "ParallelClean":
+  parallel:
+    move Arm1 to "StationA"
+    move Arm2 to "StationB"
+  when sensor "door" is open:
+    navigate to "Dock"
+end task

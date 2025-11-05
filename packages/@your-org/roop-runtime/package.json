@@ -1,0 +1,25 @@
+{
+  "name": "@your-org/roop-runtime",
+  "version": "0.4.0",
+  "description": "Lightweight execution engine and CLI for the ROOP DSL",
+  "type": "module",
+  "license": "MIT",
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "types": "",
+  "bin": {
+    "roop-runtime": "src/cli/roop-runtime.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "test": "node ./src/tests/run-tests.js",
+    "lint": "node ./scripts/lint.mjs",
+    "format": "node ./scripts/format.mjs",
+    "clean": "node ./scripts/clean.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

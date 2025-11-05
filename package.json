@@ -1,0 +1,24 @@
+{
+  "name": "roop-monorepo",
+  "version": "0.4.0",
+  "private": true,
+  "license": "MIT",
+  "description": "ROOP runtime and VS Code tooling",
+  "workspaces": [
+    "packages/*",
+    "packages/@your-org/*"
+  ],
+  "scripts": {
+    "build": "npm run build:runtime && npm run build:extension",
+    "build:runtime": "npm --workspace=@your-org/roop-runtime run build",
+    "build:extension": "npm --workspace=roop-language-support run build",
+    "test": "npm --workspace=@your-org/roop-runtime run test",
+    "lint": "npm --workspace=@your-org/roop-runtime run lint && npm --workspace=roop-language-support run lint",
+    "format": "npm --workspace=@your-org/roop-runtime run format && npm --workspace=roop-language-support run format",
+    "clean": "npm --workspace=@your-org/roop-runtime run clean && npm --workspace=roop-language-support run clean",
+    "dev": "npm run build && echo 'Launch VS Code with --extensionDevelopmentPath=packages/roop-vscode'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
